@@ -1,7 +1,13 @@
 <script setup>
+
+
 </script>
 <template>
     <div class="flex justify-center text-lg underline">
-        Testing the tailwind
+        <div>
+            Testing the tailwind
+        </div>
+    <a-button type="primary">Primary Button</a-button>
+
     </div>
 </template>
