@@ -51,7 +51,7 @@ class AuthenticationController extends Controller
 
             // return Auth::guard('connectware')->user();
 
-            return redirect()->route('dashboard', ['start' => 0, 'limit' => 10]);
+            return redirect()->route('dashboard', ['page' => 1]);
         }
     }
 
@@ -86,9 +86,7 @@ class AuthenticationController extends Controller
 
         $user = Authenticated::create($newUserData);
 
+        // save an authenticated session data
         Auth::guard('connectware')->login($user);
-        // Auth::guard('connectware')->attempt(['username' => $user->username]);
-
-        // Auth::guard('connectware')->loginUsingId($user->id);
     }
 }

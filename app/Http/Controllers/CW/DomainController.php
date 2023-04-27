@@ -33,21 +33,35 @@ class DomainController extends Controller
         return Inertia::render('Dashboard/Index', [
             'hasError' => $hasError,
             'token' => $request->session()->get('access_token'),
-            'domains' => $domains->json(),
+            'domains' => [
+                'data' => $domains->json(),
+                'count' => $this->domaintCount($request)->json(),
+            ],
+            'filters' => (object) ['search' => $request->input('search'), 'current' => $request->input('page')],
         ]);
     }
 
     public function domains(Request $request)
     {
+        $page_start = 0; // start at 0 index
+        $page_end = 10; // limit with 10 data it means end at index 9
 
-        $page_start = $request->start || 0;
-        $page_end = $request->limit == 0 ? $request->limit : 10;
+        if ($request->page > 1) {
+            $page_end = ($request->page * 10) - 1;
+            $page_start = $page_end - 9;
+        }
 
-        // return Http::withToken('e911c0c08b7ffe5fe03d7200a419ed4c')->post($this->cw_base_api.'?action=read&object=domain&format=json', []);
-        // return Http::withToken($request->session()->get('access_token'))->post($this->cw_base_api.'?action=read&object=domain&format=json&start='.strval(0).'&?limit='.strval(1).'', []);
+        $payload = ['domain' => $request->search];
+
         return Http::withToken($request->session()->get('access_token'))->post($this->cw_base_api.'?action=read&object=domain&format=json', [
             'start' => $page_start,
             'limit' => $page_end,
+            ...$payload,
         ]);
+    }
+
+    public function domaintCount(Request $request)
+    {
+        return Http::withToken($request->session()->get('access_token'))->post($this->cw_base_api.'?action=count&object=domain&format=json');
     }
 }

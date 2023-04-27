@@ -30,3 +30,4 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::get('/dashboard', [\App\Http\Controllers\CW\DomainController::class, 'index'])->name('dashboard');
+Route::get('/users', [\App\Http\Controllers\CW\UserController::class, 'index'])->name('users');
