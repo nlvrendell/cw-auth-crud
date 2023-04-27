@@ -1,90 +1,54 @@
-<script setup lang="ts">
-import Checkbox from '@/Components/Checkbox.vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
-
-defineProps<{
-    canResetPassword?: boolean;
-    status?: string;
-}>();
+<script>
+import AuthLayout from "@/Layouts/GuestLayout.vue";
+export default {
+    layout: AuthLayout,
+};
+</script>
+<script setup>
+import { useForm } from "@inertiajs/vue3";
 
 const form = useForm({
-    email: '',
-    password: '',
-    remember: false,
+    username: "",
+    password: "",
 });
 
 const submit = () => {
-    form.post(route('login'), {
-        onFinish: () => form.reset('password'),
+    form.post(route("login.store"), {
+        onFinish: () => form.reset("password"),
     });
 };
 </script>
-
 <template>
-    <GuestLayout>
-        <Head title="Log in" />
-
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
-        </div>
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
+    <div>
+        <p class="text-lg">Login</p>
+        <a-form layout="vertical" class="mt-5">
+            <a-form-item
+                name="username"
+                label="Username"
+                :validateStatus="form.errors.username ? 'error' : null"
+                :help="form.errors.username"
+            >
+                <a-input
+                    type="text"
+                    name="username"
                     required
-                    autofocus
-                    autocomplete="username"
+                    v-model:value="form.username"
                 />
-
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
+            </a-form-item>
+            <a-form-item
+                name="password"
+                label="Password"
+                :validateStatus="form.errors.password ? 'error' : null"
+                :help="form.errors.password"
+            >
+                <a-input
                     type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
+                    name="password"
                     required
-                    autocomplete="current-password"
+                    v-model:value="form.password"
                 />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="block mt-4">
-                <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ml-2 text-sm text-gray-600">Remember me</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
-                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                    Forgot your password?
-                </Link>
-
-                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
-                </PrimaryButton>
-            </div>
-        </form>
-    </GuestLayout>
+            </a-form-item>
+            <a-button type="primary" @click="submit"> Login </a-button>
+        </a-form>
+    </div>
 </template>

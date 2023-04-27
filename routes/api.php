@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::post('/login', [\App\Http\Controllers\Auth\AuthenticationController::class, 'store'])->name('login.store');
+Route::post('/test-post', [\App\Http\Controllers\TestController::class, 'testApi']);
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
