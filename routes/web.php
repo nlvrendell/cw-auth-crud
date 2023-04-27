@@ -16,9 +16,7 @@ use Inertia\Inertia;
 */
 
 Route::get('/test', function () {
-    return Inertia::render('Test', [
-
-    ]);
+    return Inertia::render('Test', []);
 });
 
 Route::get('/', function () {
@@ -30,4 +28,6 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::get('/dashboard', [\App\Http\Controllers\CW\DomainController::class, 'index'])->name('dashboard');
+Route::resource('domain', \App\Http\Controllers\CW\DomainController::class)->only(['store', 'update', 'destroy']);
+
 Route::get('/users', [\App\Http\Controllers\CW\UserController::class, 'index'])->name('users');

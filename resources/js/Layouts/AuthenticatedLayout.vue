@@ -7,7 +7,7 @@ import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import NavLink from "@/Components/NavLink.vue";
 
 const handleLogout = () => {
-    router.post(route("logout"));
+    router.get(route("login"));
 };
 
 const navigations = computed(() => {
@@ -80,7 +80,9 @@ const handleImpersonate = (url) => {
                             <template #overlay>
                                 <a-menu style="min-width: 200px">
                                     <a-menu-item key="1">
-                                        <Link :href="'#'"> Account Settings </Link>
+                                        <Link :href="'#'">
+                                            Account Settings
+                                        </Link>
                                     </a-menu-item>
                                     <a-menu-item key="2"> Signout </a-menu-item>
                                 </a-menu>
