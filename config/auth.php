@@ -40,6 +40,12 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'connectware' => [
+            'driver' => 'session',
+            'provider' => 'connectware_users',
+        ],
+
     ],
 
     /*
@@ -63,6 +69,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+
+        'connectware_users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Authenticated::class,
         ],
 
         // 'users' => [

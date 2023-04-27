@@ -41,9 +41,13 @@ class DomainController extends Controller
     {
 
         $page_start = $request->start || 0;
-        $page_end = $request->limit || 9;
+        $page_end = $request->limit == 0 ? $request->limit : 10;
 
         // return Http::withToken('e911c0c08b7ffe5fe03d7200a419ed4c')->post($this->cw_base_api.'?action=read&object=domain&format=json', []);
-        return Http::withToken($request->session()->get('access_token'))->post($this->cw_base_api.'?action=read&object=domain&format=json&start='.strval($page_start).'&?limit='.strval($page_end).'', []);
+        // return Http::withToken($request->session()->get('access_token'))->post($this->cw_base_api.'?action=read&object=domain&format=json&start='.strval(0).'&?limit='.strval(1).'', []);
+        return Http::withToken($request->session()->get('access_token'))->post($this->cw_base_api.'?action=read&object=domain&format=json', [
+            'start' => $page_start,
+            'limit' => $page_end,
+        ]);
     }
 }

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Authenticated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
 
@@ -45,7 +47,11 @@ class AuthenticationController extends Controller
         if ($response->ok()) {
             $request->session()->put('access_token', $response['access_token']);
 
-            return redirect()->route('dashboard');
+            $this->setAuthenticated($request, $response);
+
+            // return Auth::guard('connectware')->user();
+
+            return redirect()->route('dashboard', ['start' => 0, 'limit' => 10]);
         }
     }
 
@@ -54,5 +60,35 @@ class AuthenticationController extends Controller
         throw ValidationException::withMessages([
             $key => $message,
         ]);
+    }
+
+    public function setAuthenticated($request, $response)
+    {
+        $newUserData = [
+            'uid' => $response['uid'],
+            'name' => $response['displayName'],
+            'username' => $response['username'],
+            'user' => $response['user'],
+            'territory' => $response['territory'],
+            'domain' => $response['domain'],
+            'department' => $response['department'],
+            'login' => $response['login'],
+            'scope' => $response['scope'],
+            'user_email' => $response['user_email'],
+            'expires_in' => $response['expires_in'],
+            'token_type' => $response['token_type'],
+            'access_token' => $response['access_token'],
+            'refresh_token' => $response['refresh_token'],
+            'client_id' => $response['client_id'],
+            'apiversion' => $response['apiversion'],
+            'api_password' => $request->password,
+        ];
+
+        $user = Authenticated::create($newUserData);
+
+        Auth::guard('connectware')->login($user);
+        // Auth::guard('connectware')->attempt(['username' => $user->username]);
+
+        // Auth::guard('connectware')->loginUsingId($user->id);
     }
 }
