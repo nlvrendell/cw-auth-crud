@@ -19,6 +19,11 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
+
+        if (! $request->page) {
+            $request->merge(['page' => 1]); // default page
+        }
+
         $hasError = null;
         $transaction = $this->users($request);
         if ($transaction->forbidden()) {

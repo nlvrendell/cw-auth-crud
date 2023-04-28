@@ -19,6 +19,11 @@ class DomainController extends Controller
 
     public function index(Request $request)
     {
+
+        if (! $request->page) {
+            $request->merge(['page' => 1]); // default page
+        }
+
         $hasError = null;
         $domains = $this->domains($request);
         if ($domains->forbidden()) {
