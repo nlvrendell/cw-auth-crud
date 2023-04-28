@@ -29,5 +29,6 @@ Route::get('/login', function () {
 
 Route::get('/dashboard', [\App\Http\Controllers\CW\DomainController::class, 'index'])->name('dashboard');
 Route::resource('domain', \App\Http\Controllers\CW\DomainController::class)->only(['store', 'update', 'destroy']);
+Route::get('/domain/{domain}/users', [\App\Http\Controllers\CW\Domain\UserController::class, 'index'])->name('domain.users');
 
 Route::get('/users', [\App\Http\Controllers\CW\UserController::class, 'index'])->name('users');

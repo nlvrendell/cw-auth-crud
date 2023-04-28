@@ -84,7 +84,7 @@ const handleImpersonate = (url) => {
                                             Account Settings
                                         </Link>
                                     </a-menu-item>
-                                    <a-menu-item key="2"> Signout </a-menu-item>
+                                    <a-menu-item key="2" @click="handleLogout"> Signout </a-menu-item>
                                 </a-menu>
                             </template>
                         </a-dropdown>

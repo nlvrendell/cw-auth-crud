@@ -8,6 +8,7 @@ export default {
 import { router, useForm } from "@inertiajs/vue3";
 import { reactive, computed, ref, watch, createVNode } from "vue";
 import {
+    SettingOutlined,
     EditOutlined,
     DeleteOutlined,
     ExclamationCircleOutlined,
@@ -164,26 +165,6 @@ const handleRemove = (record) => {
                 // loading
                 return await new Promise((resolve) => {
                     setTimeout(() => {
-                        // router.delete(
-                        //     route("domain.destroy", [record.domain]),
-                        //     {
-                        //         domain: record.domain,
-                        //     },
-                        //     {
-                        //         onSuccess: () => {
-                        //             console.log("at success");
-                        //             search.value = ""; // refresh the page
-                        //             notification["success"]({
-                        //                 message: `Domain successfully removed.`,
-                        //             });
-                        //             resolve(); // stop the promise async
-                        //         },
-                        //         onFinish: () => {
-                        //             resolve(); // stop the promise async
-                        //             console.log("Request finished");
-                        //         },
-                        //     }
-                        // );
                         form.delete(route("domain.destroy", [record.domain]), {
                             onSuccess: () => {
                                 console.log("at success");
@@ -206,6 +187,10 @@ const handleRemove = (record) => {
         },
     });
 };
+
+const goToUsers = (domain) => {
+    router.get(route('domain.users', [domain]));
+}
 </script>
 <template>
     <div>
@@ -234,6 +219,34 @@ const handleRemove = (record) => {
             <template #bodyCell="{ column, record }">
                 <template v-if="column.key === 'action'">
                     <div class="flex items-center justify-end space-x-3">
+                        <a-tooltip placement="top">
+                            <template #title>
+                                <span>Manage</span>
+                            </template>
+                            <!-- <a-button shape="circle" @click="openModal(record)">
+                                <template #icon>
+                                    <setting-outlined />
+                                </template>
+                            </a-button> -->
+
+                            <a-dropdown :trigger="['click']" placement="left">
+                                <a-button shape="circle">
+                                    <template #icon>
+                                        <setting-outlined />
+                                    </template>
+                                </a-button>
+                                <template #overlay>
+                                    <a-menu>
+                                        <a-menu-item>
+                                            <a href="javascript:;">Details</a>
+                                        </a-menu-item>
+                                        <a-menu-item>
+                                            <a href="javascript:;" @click="goToUsers(record.domain)">User</a>
+                                        </a-menu-item>
+                                    </a-menu>
+                                </template>
+                            </a-dropdown>
+                        </a-tooltip>
                         <a-tooltip placement="top">
                             <template #title>
                                 <span>Edit</span>
