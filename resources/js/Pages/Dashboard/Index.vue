@@ -189,8 +189,8 @@ const handleRemove = (record) => {
 };
 
 const goToUsers = (domain) => {
-    router.get(route('domain.users', [domain]));
-}
+    router.get(route("domain.users.index", [domain]), { page: 1 });
+};
 </script>
 <template>
     <div>
@@ -241,7 +241,13 @@ const goToUsers = (domain) => {
                                             <a href="javascript:;">Details</a>
                                         </a-menu-item>
                                         <a-menu-item>
-                                            <a href="javascript:;" @click="goToUsers(record.domain)">User</a>
+                                            <a
+                                                href="javascript:;"
+                                                @click="
+                                                    goToUsers(record.domain)
+                                                "
+                                                >User</a
+                                            >
                                         </a-menu-item>
                                     </a-menu>
                                 </template>
