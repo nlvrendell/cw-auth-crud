@@ -112,6 +112,14 @@ const form = useForm({
 });
 
 const openModal = (data = null) => {
+    if (data) {
+        form.id = data.user + "@" + data.domain;
+        form.domain = data.domain;
+        form.user = data.user;
+        form.first_name = data.first_name;
+        form.last_name = data.last_name;
+        form.email = data.email;
+    }
     visible.value = true;
 };
 
@@ -123,7 +131,7 @@ const handleCancel = () => {
 
 const handleSubmit = () => {
     if (!form.id) {
-        form.post(route("domain.users.store"), {
+        form.post(route("domain.users.store", [form.domain]), {
             preserveState: true,
             onSuccess: () => {
                 form.reset();
@@ -135,20 +143,57 @@ const handleSubmit = () => {
         });
     } else {
         console.log("should trigger the edit!");
-        form.put(route("domain.update", [form.id]), {
+        form.put(route("domain.users.update", [form.domain, form.id]), {
             preserveState: true,
             onSuccess: () => {
                 form.reset();
                 visible.value = false;
                 notification["success"]({
-                    message: "Domain Successfully Updated.",
+                    message: "User Successfully Updated.",
                 });
             },
         });
     }
 };
 
-const handleRemove = () => {};
+const handleRemove = (record) => {
+    Modal.confirm({
+        title: `Are you sure you want to delete ${record.first_name} ${record.last_name}?`,
+        icon: createVNode(ExclamationCircleOutlined),
+        content: "Please make sure you understand this action",
+        okText: "Confirm",
+        async onOk() {
+            try {
+                // loading
+                return await new Promise((resolve) => {
+                    setTimeout(() => {
+                        var uid = record.user + "@" + record.domain; // user identification
+                        console.log(uid);
+                        form.delete(
+                            route("domain.users.destroy", [record.domain, uid]),
+                            {
+                                onSuccess: () => {
+                                    console.log("at success");
+                                    search.value = ""; // refresh the page
+                                    notification["success"]({
+                                        message: `User successfully removed.`,
+                                    });
+                                    resolve(); // stop the promise async
+                                },
+                                onFinish: () => {
+                                    console.log("Request finished");
+                                    resolve(); // stop the promise async
+                                },
+                            }
+                        );
+                    }, 300);
+                });
+            } catch {
+                return console.log("Oops errors!");
+            }
+        },
+    });
+};
 </script>
 <template>
     <div class="mb-4">
@@ -227,7 +272,11 @@ const handleRemove = () => {};
                 :help="form.errors.domain"
                 name="domain"
             >
-                <a-input type="text" v-model:value="form.domain" />
+                <a-input
+                    type="text"
+                    v-model:value="form.domain"
+                    :disabled="form.id != null"
+                />
             </a-form-item>
             <a-form-item
                 label="First Name"
@@ -265,7 +314,11 @@ const handleRemove = () => {};
                 :help="form.errors.user"
                 name="user"
             >
-                <a-input type="text" v-model:value="form.user" />
+                <a-input
+                    type="text"
+                    v-model:value="form.user"
+                    :disabled="form.id != null"
+                />
             </a-form-item>
         </a-form>
     </a-modal>

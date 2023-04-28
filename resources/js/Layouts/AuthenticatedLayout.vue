@@ -80,11 +80,13 @@ const handleImpersonate = (url) => {
                             <template #overlay>
                                 <a-menu style="min-width: 200px">
                                     <a-menu-item key="1">
-                                        <Link :href="'#'">
-                                            Account Settings
+                                        <Link :href="route('profile')">
+                                            Account Profile
                                         </Link>
                                     </a-menu-item>
-                                    <a-menu-item key="2" @click="handleLogout"> Signout </a-menu-item>
+                                    <a-menu-item key="2" @click="handleLogout">
+                                        Signout
+                                    </a-menu-item>
                                 </a-menu>
                             </template>
                         </a-dropdown>

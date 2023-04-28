@@ -34,3 +34,5 @@ Route::resource('domain', \App\Http\Controllers\CW\DomainController::class)->onl
 Route::get('/users', [\App\Http\Controllers\CW\UserController::class, 'index'])->name('users');
 Route::post('/domain/users', [\App\Http\Controllers\CW\UserController::class, 'store'])->name('domain.users.store');
 Route::resource('domain.users', \App\Http\Controllers\CW\Domain\UserController::class)->only(['index', 'update', 'destroy']);
+
+Route::get('/profile', [\App\Http\Controllers\CW\ProfileController::class, 'index'])->name('profile');

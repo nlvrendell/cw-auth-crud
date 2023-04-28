@@ -51,7 +51,7 @@ class UserController extends Controller
             $page_start = $page_end - 9;
         }
 
-        $payload = ['first_name' => $request->search, 'last_name' => $request->search];
+        $payload = ['uid' => $request->search];
 
         return Http::withToken($request->session()->get('access_token'))->post($this->cw_base_api.'?action=read&object=subscriber&format=json', [
             'start' => $page_start,

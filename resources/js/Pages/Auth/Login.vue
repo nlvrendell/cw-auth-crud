@@ -48,7 +48,7 @@ const submit = () => {
                     v-model:value="form.password"
                 />
             </a-form-item>
-            <a-button type="primary" @click="submit"> Login </a-button>
+            <a-button type="primary" @click="submit" :loading="form.processing"> Login </a-button>
         </a-form>
     </div>
 </template>
