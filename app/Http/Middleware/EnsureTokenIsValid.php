@@ -52,7 +52,6 @@ class EnsureTokenIsValid
         if ($response->ok()) {
 
             session(['access_token' => $response['access_token']]);
-
             $this->setAuthenticated($user, $response);
 
             return $next($request);
@@ -63,14 +62,11 @@ class EnsureTokenIsValid
 
     public function setAuthenticated($user, $response)
     {
-
         $newUserData = [
             'access_token' => $response['access_token'],
             'refresh_token' => $response['refresh_token'],
             'token_expired_in' => now()->addSeconds(3600), // exact time token expires
         ];
-
-        dd($newUserData);
 
         $user = tap(Authenticated::where('id', $user->id))->update($newUserData)->first();
 
