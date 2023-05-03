@@ -11,16 +11,19 @@ const handleLogout = () => {
 };
 
 const navigations = computed(() => {
-    return [
+    var navigations = [
         { name: "Domain", route: "dashboard" },
         { name: "Users", route: "users" },
     ];
-});
 
-// impersonate
-const handleImpersonate = (url) => {
-    router.get(url);
-};
+    var forSuperUser = [{ name: "Reseller", route: "resellers.index" }];
+
+    if (usePage().props.auth.user.scope == "Super User") {
+        navigations.push(...forSuperUser);
+    }
+
+    return navigations;
+});
 </script>
 
 <template>
