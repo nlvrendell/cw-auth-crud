@@ -11,6 +11,8 @@ import {
     EditOutlined,
     DeleteOutlined,
     ExclamationCircleOutlined,
+    ArrowLeftOutlined,
+    PlusOutlined,
 } from "@ant-design/icons-vue";
 import debounce from "lodash/debounce";
 import { notification, Modal } from "ant-design-vue";
@@ -200,9 +202,11 @@ const handleRemove = (record) => {
     <div>
         <a-button
             type="default"
-            class="mb-4"
+            class="mb-4 flex justify-center"
             @click="router.get(route('dashboard'), { page: 1 })"
-            >Back</a-button
+        >
+            <arrow-left-outlined class="mt-1" />
+            Back</a-button
         >
     </div>
     <div class="mb-4">
@@ -216,8 +220,12 @@ const handleRemove = (record) => {
                     allowClear
                 />
             </div>
-            <a-button type="primary" @click="openModal(null)"
-                >Add User</a-button
+            <a-button
+                type="primary"
+                @click="openModal(null)"
+                class="flex justify-center"
+            >
+                <plus-outlined class="mt-0.5" /> Add User</a-button
             >
         </div>
     </div>

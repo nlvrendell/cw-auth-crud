@@ -49,18 +49,17 @@ class UserController extends Controller
     public function users(Request $request)
     {
         $page_start = 0; // start at 0 index
-        $page_end = 10; // limit with 10 data it means end at index 9
+        $per_page = 10; // limit with 10 data it means end at index 9
 
         if ($request->page > 1) {
-            $page_end = ($request->page * 10) - 1;
-            $page_start = $page_end - 9;
+            $page_start = ($request->page * $per_page) - $per_page;
         }
 
         $payload = ['uid' => $request->search];
 
         return Http::withToken($request->session()->get('access_token'))->post($this->cw_base_api.'?action=read&object=subscriber&format=json', [
             'start' => $page_start,
-            'limit' => $page_end,
+            'limit' => $per_page,
             ...$payload,
         ]);
     }

@@ -11,6 +11,7 @@ import {
     EditOutlined,
     DeleteOutlined,
     ExclamationCircleOutlined,
+    PlusOutlined,
 } from "@ant-design/icons-vue";
 import debounce from "lodash/debounce";
 import { notification, Modal } from "ant-design-vue";
@@ -65,7 +66,7 @@ const columns = reactive([
 ]);
 
 const pagination = computed(() => ({
-    total: props.filters?.search ? 0 : parseInt(props.users?.count?.total),
+    total: props.filters?.search ? 0 : parseInt(props.users?.count?.total / 10),
     current: props.filters?.current,
     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
     showSizeChanger: false,
@@ -207,7 +208,13 @@ const handleRemove = (record) => {
                     allowClear
                 />
             </div>
-            <a-button type="primary" @click="openModal">Add User</a-button>
+            <a-button
+                type="primary"
+                @click="openModal(null)"
+                class="flex justify-center"
+            >
+                <plus-outlined class="mt-0.5" /> Add User</a-button
+            >
         </div>
     </div>
     <a-table

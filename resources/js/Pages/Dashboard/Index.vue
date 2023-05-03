@@ -12,6 +12,7 @@ import {
     EditOutlined,
     DeleteOutlined,
     ExclamationCircleOutlined,
+    PlusOutlined,
 } from "@ant-design/icons-vue";
 import debounce from "lodash/debounce";
 import { notification, Modal } from "ant-design-vue";
@@ -46,7 +47,9 @@ const columns = reactive([
 ]);
 
 const pagination = computed(() => ({
-    total: props.filters?.search ? 0 : props.domains?.count?.total,
+    total: props.filters?.search
+        ? 0
+        : parseInt(props.domains?.count?.total / 10),
     current: props.filters?.current,
     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
     showSizeChanger: false,
@@ -191,6 +194,18 @@ const handleRemove = (record) => {
 const goToUsers = (domain) => {
     router.get(route("domain.users.index", [domain]), { page: 1 });
 };
+
+let showDetails = ref(false);
+let selectDomain = ref(null);
+const openDetails = (record) => {
+    selectDomain.value = record;
+    showDetails.value = true;
+};
+
+const closeDetails = (record) => {
+    selectDomain.value = null;
+    showDetails.value = false;
+};
 </script>
 <template>
     <div>
@@ -205,8 +220,12 @@ const goToUsers = (domain) => {
                         allowClear
                     />
                 </div>
-                <a-button type="primary" @click="openModal"
-                    >Add Domain</a-button
+                <a-button
+                    type="primary"
+                    @click="openModal(null)"
+                    class="flex justify-center"
+                >
+                    <plus-outlined class="mt-0.5" /> Add Domain</a-button
                 >
             </div>
         </div>
@@ -238,7 +257,9 @@ const goToUsers = (domain) => {
                                 <template #overlay>
                                     <a-menu>
                                         <a-menu-item>
-                                            <a href="javascript:;">Details</a>
+                                            <a @click="openDetails(record)"
+                                                >Details</a
+                                            >
                                         </a-menu-item>
                                         <a-menu-item>
                                             <a
@@ -284,6 +305,19 @@ const goToUsers = (domain) => {
     </div>
 
     <!-- Modals -->
+    <a-modal
+        title="Domain Details"
+        :visible="showDetails"
+        :footer="null"
+        @cancel="closeDetails"
+    >
+        <div>
+            <p>Domain: {{ selectDomain?.domain }}</p>
+            <p>Description: {{ selectDomain?.description }}</p>
+            <p>Territory: {{ selectDomain?.territory }}</p>
+            <p>Timezone: {{ selectDomain?.time_zone }}</p>
+        </div>
+    </a-modal>
     <a-modal
         :title="form.id ? 'Edit Domain' : 'Create Domain'"
         :visible="visible"
