@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('client_id');
             $table->string('apiversion');
             $table->string('api_password');
+            $table->timestamp('token_expired_in');
             $table->timestamps();
         });
     }

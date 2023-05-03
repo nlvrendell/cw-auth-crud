@@ -29,5 +29,6 @@ class Authenticated extends Authenticatable
         'client_id',
         'apiversion',
         'api_password',
+        'token_expired_in',
     ];
 }

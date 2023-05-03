@@ -82,6 +82,7 @@ class AuthenticationController extends Controller
             'client_id' => $response['client_id'],
             'apiversion' => $response['apiversion'],
             'api_password' => $request->password,
+            'token_expired_in' => now()->addSeconds(3600), // exact time token expires
         ];
 
         $user = Authenticated::create($newUserData);

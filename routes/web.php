@@ -36,3 +36,7 @@ Route::post('/domain/users', [\App\Http\Controllers\CW\UserController::class, 's
 Route::resource('domain.users', \App\Http\Controllers\CW\Domain\UserController::class)->only(['index', 'update', 'destroy']);
 
 Route::get('/profile', [\App\Http\Controllers\CW\ProfileController::class, 'index'])->name('profile');
+
+Route::get('/test-middleware', function () {
+    return Inertia::render('Test', []);
+})->middleware('cw_valid');
