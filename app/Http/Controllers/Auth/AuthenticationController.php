@@ -90,4 +90,13 @@ class AuthenticationController extends Controller
         // save an authenticated session data
         Auth::guard('connectware')->login($user);
     }
+
+    public function logout(Request $request)
+    {
+        Authenticated::where('id', Auth::guard('connectware')->user()->id)->delete();
+
+        Auth::guard('connectware')->logout();
+
+        return redirect('login');
+    }
 }

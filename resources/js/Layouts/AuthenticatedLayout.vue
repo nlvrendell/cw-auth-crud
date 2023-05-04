@@ -7,7 +7,7 @@ import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import NavLink from "@/Components/NavLink.vue";
 
 const handleLogout = () => {
-    router.get(route("login"));
+    router.post(route("logout"));
 };
 
 const navigations = computed(() => {

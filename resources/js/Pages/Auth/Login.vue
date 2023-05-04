@@ -5,7 +5,14 @@ export default {
 };
 </script>
 <script setup>
-import { useForm } from "@inertiajs/vue3";
+import { useForm, usePage, router } from "@inertiajs/vue3";
+import { onMounted } from "vue";
+
+onMounted(() => {
+    if (usePage().props.auth.user) {
+        router.get(route("dashboard", { page: 1 }));
+    }
+});
 
 const form = useForm({
     username: "",
@@ -48,7 +55,9 @@ const submit = () => {
                     v-model:value="form.password"
                 />
             </a-form-item>
-            <a-button type="primary" @click="submit" :loading="form.processing"> Login </a-button>
+            <a-button type="primary" @click="submit" :loading="form.processing">
+                Login
+            </a-button>
         </a-form>
     </div>
 </template>

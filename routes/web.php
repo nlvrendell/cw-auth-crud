@@ -28,6 +28,7 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::group(['middleware' => ['cw_valid']], function () {
+
     Route::get('/test-middleware', function () {
         return Inertia::render('Test', []);
     });
@@ -44,4 +45,6 @@ Route::group(['middleware' => ['cw_valid']], function () {
 
     // Superadmin
     Route::resource('resellers', \App\Http\Controllers\CW\ResellerController::class)->only(['index', 'store', 'update', 'destroy']);
+
+    Route::post('/logout', [\App\Http\Controllers\Auth\AuthenticationController::class, 'logout'])->name('logout');
 });
