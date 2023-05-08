@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
+use Inertia\Inertia;
 
 class AuthenticationController extends Controller
 {
@@ -22,6 +23,15 @@ class AuthenticationController extends Controller
         $this->cw_base_api = config('connectware.api');
         $this->client_id = config('connectware.client_id');
         $this->client_secret = config('connectware.client_secret');
+    }
+
+    public function index(Request $request)
+    {
+        if (Auth::guard('connectware')->check()) {
+            return redirect()->route('dashboard', ['page' => 1]);
+        }
+
+        return Inertia::render('Auth/Login');
     }
 
     public function store(Request $request)

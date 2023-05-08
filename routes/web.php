@@ -20,12 +20,10 @@ Route::get('/test', function () {
 });
 
 Route::get('/', function () {
-    return Inertia::render('Auth/Login');
+    return redirect()->route('login');
 });
 
-Route::get('/login', function () {
-    return Inertia::render('Auth/Login');
-})->name('login');
+Route::get('/login', [\App\Http\Controllers\Auth\AuthenticationController::class, 'index'])->name('login');
 
 Route::group(['middleware' => ['cw_valid']], function () {
 
@@ -43,8 +41,20 @@ Route::group(['middleware' => ['cw_valid']], function () {
     Route::post('/domain/users', [\App\Http\Controllers\CW\UserController::class, 'store'])->name('domain.users.store');
     Route::resource('domain.users', \App\Http\Controllers\CW\Domain\UserController::class)->only(['index', 'update', 'destroy']);
 
-    // Superadmin
-    Route::resource('resellers', \App\Http\Controllers\CW\ResellerController::class)->only(['index', 'store', 'update', 'destroy']);
-
     Route::post('/logout', [\App\Http\Controllers\Auth\AuthenticationController::class, 'logout'])->name('logout');
+
+    Route::group(['middleware' => ['scope:Reseller']], function () {
+        Route::get('/reseller-scope', function () {
+            return 'Reseller here';
+        });
+    });
+
+    Route::group(['middleware' => ['scope:Super User']], function () {
+        // Superadmin
+        Route::resource('resellers', \App\Http\Controllers\CW\ResellerController::class)->only(['index', 'store', 'update', 'destroy']);
+
+        Route::get('/super-scope', function () {
+            return 'Super user here';
+        });
+    });
 });
